@@ -2,7 +2,9 @@ import Head from "next/head";
 import { Element, Link as ScrollLink, scroller } from "react-scroll";
 
 export default function Home() {
-  const links = ["About", "Partners", "Portfolio", "Contact Us"];
+  const containerClass =
+    "flex h-screen flex-col items-center justify-center gap-16 px-12 py-16";
+  const headerClass = "tracking-tight text-[5rem]";
 
   const scrollToSection = (section: string) => {
     scroller.scrollTo(section, {
@@ -12,16 +14,76 @@ export default function Home() {
     });
   };
 
+  const IntroContainer = () => (
+    <Element name="Intro">
+      <div className={containerClass}>
+        <h1 className={headerClass}>
+          We help you build <span className="text-rose-600">Capital</span>
+        </h1>
+      </div>
+    </Element>
+  );
+
+  const AboutContainer = () => (
+    <div className="w-full bg-yellow-500 px-16 py-16 lg:w-2/3">
+      <p className="text-xl text-blue-800">
+        Achka Capital specializes in value-add multifamily real estate,
+        providing strong risk-adjusted returns through strategic acquisitions
+        and initiatives, prioritizing inclusivity in investment opportunities,
+        and fostering trust and transparency for accessible and empowering real
+        estate investments.
+      </p>
+    </div>
+  );
+
+  const PartnerContainer = () => {
+    const partners = ["Jake & Gino", "Marco Barbaro", "Yosef Lee"];
+    return (
+      <div className="grid w-full grid-cols-3 gap-4 sm:grid-cols-3 md:gap-12 lg:w-2/3">
+        {partners.map((x, i) => (
+          <div key={i} className="h-64 bg-rose-600">
+            <h3 className="text-center text-2xl">{x}</h3>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const PortfolioContainer = () => {
+    const portfolio = [
+      "The Steeples",
+      "Highland & Penn",
+      "SFH - NY, Tennessee",
+      "The Retreat",
+    ];
+    return (
+      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 md:gap-12 lg:w-2/3">
+        {portfolio.map((x, i) => (
+          <div key={i} className="h-64 bg-rose-600">
+            <h3 className="text-center text-2xl">{x}</h3>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
+  const links = {
+    About: AboutContainer(),
+    Partners: PartnerContainer(),
+    Portfolio: PortfolioContainer(),
+    Contact: null,
+  };
+
   return (
     <>
       <Head>
         {/* Head content */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col bg-gradient-to-b from-[#02126d] to-[#15162c]">
+      <main className="flex min-h-screen flex-col bg-gradient-to-b from-[#1E40AF] to-[#15162c]">
         {/* Navigation */}
         <div className="fixed w-full">
-          <div className=" mx-8 my-8 flex flex-row justify-between space-x-4">
+          <div className="mx-8 my-8 flex flex-row justify-between space-x-4">
             {/* Logo */}
             <div>
               <ScrollLink
@@ -33,15 +95,16 @@ export default function Home() {
                 onClick={() => scrollToSection("Intro")}
               >
                 <h1 className="text-4xl">
-                  Achka <span className="text-[hsl(0,100%,60%)]">Capital</span>
+                  Achka <span className="bg-rose-600">Capital</span>
                 </h1>
               </ScrollLink>
             </div>
+
             {/* Navigation Links */}
             <div className="space-x-8 text-xl">
-              {links.map((x, i) => (
+              {Object.keys(links).map((x, i) => (
                 <ScrollLink
-                  className="cursor-pointer"
+                  className="cursor-pointer hover:text-rose-600"
                   to={x.toLowerCase().replace(" ", "-")}
                   key={i}
                   smooth={true}
@@ -58,20 +121,14 @@ export default function Home() {
           </div>
         </div>
 
-        <Element name="Intro">
-          <div className="flex h-screen flex-col items-center justify-center gap-12 px-4 py-16">
-            <h1 className="tracking-tight sm:text-[5rem]">
-              We help you build{" "}
-              <span className="text-[hsl(0,100%,60%)]">Capital</span>
-            </h1>
-          </div>
-        </Element>
-
         {/* Sections */}
-        {links.map((x, i) => (
-          <Element name={x.toLowerCase().replace(" ", "-")} key={i}>
-            <div className="flex h-screen flex-col items-center justify-center gap-12 px-4 py-16">
-              <h1 className="tracking-tight sm:text-[5rem]">{x}</h1>
+        <IntroContainer />
+
+        {Object.entries(links).map(([k, v], i) => (
+          <Element name={k.toLowerCase().replace(" ", "-")} key={i}>
+            <div className={containerClass}>
+              <h1 className={headerClass}>{k}</h1>
+              {v ? v : <div></div>}
             </div>
           </Element>
         ))}
