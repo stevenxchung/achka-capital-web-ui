@@ -1,9 +1,10 @@
 import Head from "next/head";
+import Image from "next/image";
 import { Element, Link as ScrollLink, scroller } from "react-scroll";
 
 export default function Home() {
   const containerClass =
-    "flex h-screen flex-col items-center justify-center gap-16 px-12 py-16";
+    "flex h-screen flex-col items-center justify-center gap-10 px-12 py-16";
   const headerClass = "tracking-tight text-[5rem]";
 
   const scrollToSection = (section: string) => {
@@ -18,7 +19,7 @@ export default function Home() {
     <Element name="Intro">
       <div className={containerClass}>
         <h1 className={headerClass}>
-          We help you build <span className="text-rose-600">Capital</span>
+          We help you build <span className="text-yellow-400">Capital</span>
         </h1>
       </div>
     </Element>
@@ -29,9 +30,17 @@ export default function Home() {
       <p className="text-xl text-blue-800">
         Achka Capital specializes in value-add multifamily real estate,
         providing strong risk-adjusted returns through strategic acquisitions
-        and initiatives, prioritizing inclusivity in investment opportunities,
-        and fostering trust and transparency for accessible and empowering real
-        estate investments.
+        and initiatives. With over a decade of experience across diverse
+        markets, including New York, Tennessee, Texas, Colorado, South Carolina,
+        and North Carolina, our expertise covers market analysis, property
+        evaluation, financing, and risk management.
+        <br />
+        <br />
+        We prioritize inclusivity in investment opportunities, emphasizing trust
+        and transparency for accessible real estate investments. Our strategy
+        focuses on thriving markets with strong rental demand and favorable
+        economic indicators. Through renovation and repositioning, we maximize
+        cash flow and long-term appreciation.
       </p>
     </div>
   );
@@ -41,7 +50,7 @@ export default function Home() {
     return (
       <div className="grid w-full grid-cols-3 gap-4 sm:grid-cols-3 md:gap-12 lg:w-2/3">
         {partners.map((x, i) => (
-          <div key={i} className="h-64 bg-rose-600">
+          <div key={i} className="h-64 bg-blue-700">
             <h3 className="text-center text-2xl">{x}</h3>
           </div>
         ))}
@@ -50,17 +59,26 @@ export default function Home() {
   };
 
   const PortfolioContainer = () => {
-    const portfolio = [
-      "The Steeples",
-      "Highland & Penn",
-      "SFH - NY, Tennessee",
-      "The Retreat",
-    ];
+    const portfolio = {
+      "The Retreat": "01-the-retreat.png",
+      "Highland & Penn": "02-highland-and-penn.png",
+      "Highland & Penn (Interior)": "03-highland-and-penn-interior.png",
+      "Single Family Home - NY": "04-sfh-ny.png",
+      "Multi Family Home - TX": "05-multi-family.png",
+      "Multi Family Home - SC": "06-multi-family.png",
+    };
     return (
-      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 md:gap-12 lg:w-2/3">
-        {portfolio.map((x, i) => (
-          <div key={i} className="h-64 bg-rose-600">
-            <h3 className="text-center text-2xl">{x}</h3>
+      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8 lg:w-2/3">
+        {Object.entries(portfolio).map(([k, v], i) => (
+          <div key={i} className="h-80 bg-rose-600">
+            <Image
+              key={i}
+              src={`/homes/${v}`}
+              alt={`${k}`}
+              className="h-full w-full object-cover"
+              width={800}
+              height={800}
+            />
           </div>
         ))}
       </div>
@@ -80,7 +98,7 @@ export default function Home() {
         {/* Head content */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="flex min-h-screen flex-col bg-gradient-to-b from-[#1E40AF] to-[#15162c]">
+      <main className="flex min-h-screen flex-col bg-gradient-to-b from-[#1e40aff1] to-[#15162c] opacity-95">
         {/* Navigation */}
         <div className="fixed w-full">
           <div className="mx-8 my-8 flex flex-row justify-between space-x-4">
