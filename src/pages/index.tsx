@@ -1,22 +1,25 @@
 import Head from "next/head";
 import Image from "next/image";
+import { useState } from "react";
 import { Element, Link as ScrollLink, scroller } from "react-scroll";
 
 export default function Home() {
   const containerClass =
-    "flex h-screen flex-col items-center justify-center gap-10 px-12 py-16";
+    "flex h-screen flex-col items-center justify-center gap-10 px-12 py-16 animate-fade-in-medium";
   const headerClass = "tracking-tight text-[5rem]";
 
+  const [activeSection, setActiveSection] = useState("");
   const scrollToSection = (section: string) => {
     scroller.scrollTo(section, {
-      duration: 800,
+      duration: 500,
       delay: 0,
       smooth: "easeInOutQuart",
     });
+    setActiveSection(section);
   };
 
   const IntroContainer = () => (
-    <Element name="Intro">
+    <Element name="intro">
       <div className={containerClass}>
         <h1 className={headerClass}>
           We help you build <span className="text-yellow-400">Capital</span>
@@ -26,35 +29,46 @@ export default function Home() {
   );
 
   const AboutContainer = () => (
-    <div className="w-full bg-yellow-500 px-16 py-16 lg:w-2/3">
-      <p className="text-xl text-blue-800">
-        Achka Capital specializes in value-add multifamily real estate,
-        providing strong risk-adjusted returns through strategic acquisitions
-        and initiatives. With over a decade of experience across diverse
-        markets, including New York, Tennessee, Texas, Colorado, South Carolina,
-        and North Carolina, our expertise covers market analysis, property
-        evaluation, financing, and risk management.
-        <br />
-        <br />
-        We prioritize inclusivity in investment opportunities, emphasizing trust
-        and transparency for accessible real estate investments. Our strategy
-        focuses on thriving markets with strong rental demand and favorable
-        economic indicators. Through renovation and repositioning, we maximize
-        cash flow and long-term appreciation.
-      </p>
-    </div>
+    <Element name="about">
+      <div className={containerClass}>
+        <h1 className={headerClass}>About</h1>
+        <div className="w-full bg-yellow-500 px-16 py-16 lg:w-2/3">
+          <p className="text-xl text-black">
+            Achka Capital specializes in value-add multifamily real estate,
+            providing strong risk-adjusted returns through strategic
+            acquisitions and initiatives. With over a decade of experience
+            across diverse markets, including New York, Tennessee, Texas,
+            Colorado, South Carolina, and North Carolina, our expertise covers
+            market analysis, property evaluation, financing, and risk
+            management.
+            <br />
+            <br />
+            We prioritize inclusivity in investment opportunities, emphasizing
+            trust and transparency for accessible real estate investments. Our
+            strategy focuses on thriving markets with strong rental demand and
+            favorable economic indicators. Through renovation and repositioning,
+            we maximize cash flow and long-term appreciation.
+          </p>
+        </div>
+      </div>
+    </Element>
   );
 
   const PartnerContainer = () => {
     const partners = ["Jake & Gino", "Marco Barbaro", "Yosef Lee"];
     return (
-      <div className="grid w-full grid-cols-3 gap-4 sm:grid-cols-3 md:gap-12 lg:w-2/3">
-        {partners.map((x, i) => (
-          <div key={i} className="h-64 bg-blue-700">
-            <h3 className="text-center text-2xl">{x}</h3>
+      <Element name="partners">
+        <div className={containerClass}>
+          <h1 className={headerClass}>Partners</h1>
+          <div className="grid w-full grid-cols-3 gap-4 sm:grid-cols-3 md:gap-12 lg:w-2/3">
+            {partners.map((x, i) => (
+              <div key={i} className="h-64 bg-blue-700">
+                <h3 className="text-center text-2xl">{x}</h3>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      </Element>
     );
   };
 
@@ -67,21 +81,27 @@ export default function Home() {
       "Multi Family Home - TX": "05-multi-family.png",
       "Multi Family Home - SC": "06-multi-family.png",
     };
+
     return (
-      <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8 lg:w-2/3">
-        {Object.entries(portfolio).map(([k, v], i) => (
-          <div key={i} className="h-80 bg-rose-600">
-            <Image
-              key={i}
-              src={`/homes/${v}`}
-              alt={`${k}`}
-              className="h-full w-full object-cover"
-              width={800}
-              height={800}
-            />
+      <Element name="portfolio">
+        <div className={containerClass}>
+          <h1 className={headerClass}>Portfolio</h1>
+          <div className="grid w-full grid-cols-2 gap-4 sm:grid-cols-2 md:gap-8 lg:w-2/3">
+            {Object.entries(portfolio).map(([k, v], i) => (
+              <div key={i} className="h-80">
+                <Image
+                  key={i}
+                  src={`/homes/${v}`}
+                  alt={`${k}`}
+                  className="h-full w-full object-cover"
+                  width={800}
+                  height={800}
+                />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      </Element>
     );
   };
 
@@ -106,11 +126,11 @@ export default function Home() {
             <div>
               <ScrollLink
                 className="cursor-pointer"
-                to="Intro"
+                to="intro"
                 smooth={true}
-                offset={-70} // Adjust this value to your design
-                duration={800}
-                onClick={() => scrollToSection("Intro")}
+                offset={-70}
+                duration={500}
+                onClick={() => scrollToSection("intro")}
               >
                 <h1 className="text-4xl">
                   Achka <span className="bg-rose-600">Capital</span>
@@ -122,12 +142,16 @@ export default function Home() {
             <div className="space-x-8 text-xl">
               {Object.keys(links).map((x, i) => (
                 <ScrollLink
-                  className="cursor-pointer hover:text-rose-600"
+                  className={`cursor-pointer ${
+                    activeSection === x.toLowerCase().replace(" ", "-")
+                      ? "text-rose-600"
+                      : "hover:text-rose-600"
+                  }`}
                   to={x.toLowerCase().replace(" ", "-")}
                   key={i}
                   smooth={true}
-                  offset={-70} // Adjust this value to your design
-                  duration={800}
+                  offset={-70}
+                  duration={500}
                   onClick={() =>
                     scrollToSection(x.toLowerCase().replace(" ", "-"))
                   }
@@ -141,15 +165,16 @@ export default function Home() {
 
         {/* Sections */}
         <IntroContainer />
+        <AboutContainer />
+        <PartnerContainer />
+        <PortfolioContainer />
 
-        {Object.entries(links).map(([k, v], i) => (
-          <Element name={k.toLowerCase().replace(" ", "-")} key={i}>
-            <div className={containerClass}>
-              <h1 className={headerClass}>{k}</h1>
-              {v ? v : <div></div>}
-            </div>
-          </Element>
-        ))}
+        <Element name="contact">
+          <div className={containerClass}>
+            <h1 className={headerClass}>Contact</h1>
+            {/* This section is empty for now */}
+          </div>
+        </Element>
       </main>
     </>
   );
