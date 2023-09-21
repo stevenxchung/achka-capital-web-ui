@@ -6,20 +6,27 @@ import { Element, Link as ScrollLink, scroller } from "react-scroll";
 export default function Home() {
   const containerClass =
     "flex h-screen flex-col items-center justify-center gap-10 px-12 py-16 animate-fade-in-medium";
-  const headerClass = "tracking-tight text-[5rem]";
+  const headerClass = "tracking-tight text-[5rem] ";
 
   const [activeSection, setActiveSection] = useState("");
+  const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   const scrollToSection = (section: string) => {
     scroller.scrollTo(section, {
-      duration: 500,
+      duration: 800,
       delay: 0,
       smooth: "easeInOutQuart",
     });
     setActiveSection(section);
+    setMobileMenuOpen(false);
   };
 
   const IntroContainer = () => (
-    <Element name="intro">
+    <Element name="intro" className="mb-64">
       <div className={containerClass}>
         <h1 className={headerClass}>
           We help you build <span className="text-yellow-400">Capital</span>
@@ -105,6 +112,15 @@ export default function Home() {
     );
   };
 
+  const ContactContainer = () => (
+    <Element name="contact">
+      <div className={containerClass}>
+        <h1 className={headerClass}>Contact</h1>
+        {/* This section is empty for now */}
+      </div>
+    </Element>
+  );
+
   const links = {
     About: AboutContainer(),
     Partners: PartnerContainer(),
@@ -115,12 +131,12 @@ export default function Home() {
   return (
     <>
       <Head>
-        {/* Head content */}
+        {/* Head Content */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex min-h-screen flex-col bg-gradient-to-b from-[#1e40aff1] to-[#15162c] opacity-95">
         {/* Navigation */}
-        <div className="fixed w-full">
+        <div className="fixed z-50 w-full">
           <div className="mx-8 my-8 flex flex-row justify-between space-x-4">
             {/* Logo */}
             <div>
@@ -138,8 +154,16 @@ export default function Home() {
               </ScrollLink>
             </div>
 
-            {/* Navigation Links */}
-            <div className="space-x-8 text-xl">
+            {/* Mobile Menu Button */}
+            <button
+              className="block cursor-pointer text-4xl lg:hidden"
+              onClick={toggleMobileMenu}
+            >
+              &#9776; {/* Hamburger icon */}
+            </button>
+
+            {/* Navigation Links (Hidden on Mobile) */}
+            <div className="z-50 hidden space-x-8 text-xl lg:flex">
               {Object.keys(links).map((x, i) => (
                 <ScrollLink
                   className={`cursor-pointer ${
@@ -151,7 +175,7 @@ export default function Home() {
                   key={i}
                   smooth={true}
                   offset={-70}
-                  duration={500}
+                  duration={800}
                   onClick={() =>
                     scrollToSection(x.toLowerCase().replace(" ", "-"))
                   }
@@ -161,6 +185,32 @@ export default function Home() {
               ))}
             </div>
           </div>
+
+          {/* Mobile Dropdown Menu */}
+          {isMobileMenuOpen && (
+            <div className="z-50 space-y-20 bg-gray-900 py-8 text-white lg:hidden">
+              {Object.keys(links).map((x, i) => (
+                <ScrollLink
+                  className={`flex cursor-pointer justify-center text-2xl ${
+                    activeSection === x.toLowerCase().replace(" ", "-")
+                      ? "text-rose-600"
+                      : "hover:text-rose-600"
+                  }`}
+                  to={x.toLowerCase().replace(" ", "-")}
+                  key={i}
+                  smooth={true}
+                  offset={-70}
+                  duration={800}
+                  onClick={() => {
+                    scrollToSection(x.toLowerCase().replace(" ", "-"));
+                    toggleMobileMenu();
+                  }}
+                >
+                  {x}
+                </ScrollLink>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Sections */}
@@ -168,13 +218,7 @@ export default function Home() {
         <AboutContainer />
         <PartnerContainer />
         <PortfolioContainer />
-
-        <Element name="contact">
-          <div className={containerClass}>
-            <h1 className={headerClass}>Contact</h1>
-            {/* This section is empty for now */}
-          </div>
-        </Element>
+        <ContactContainer />
       </main>
     </>
   );
